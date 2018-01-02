@@ -10,6 +10,7 @@ public class ReversiGame {
         return gameBoard;
     }
 
+
     public ReversiGame(char[][] gameBoard) {
 
         this.gameBoard = gameBoard;
@@ -28,6 +29,10 @@ public class ReversiGame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public State getInitialState(char maxPlayer, char minPlayer){
+        return new State(this, maxPlayer, minPlayer);
     }
 
     public void printMap() {

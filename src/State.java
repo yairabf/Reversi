@@ -11,6 +11,10 @@ public class State {
     // the father that create this state
     private State _cameFrom;
 
+    public ReversiGame getState() {
+        return state;
+    }
+
     public char getMaxPlayer() {
         return maxPlayer;
     }
@@ -20,6 +24,12 @@ public class State {
     }
 
     private char maxPlayer, minPlayer;
+
+    public State(ReversiGame state, char maxPlayer, char minPlayer) {
+        this.state = state;
+        this.maxPlayer = maxPlayer;
+        this.minPlayer = minPlayer;
+    }
 
     public State(ReversiGame state, State _cameFrom, Point place, char maxPlayer, char minPlayer) {
         this.state = state;
