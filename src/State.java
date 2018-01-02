@@ -29,14 +29,15 @@ public class State {
         this.state = state;
         this.maxPlayer = maxPlayer;
         this.minPlayer = minPlayer;
+        this.countColors();
     }
 
-    public State(ReversiGame state, State _cameFrom, Point place, char maxPlayer, char minPlayer) {
+    public State(ReversiGame state, State _cameFrom, Point place, char maxPlayer, char minPlayer,char colorMove) {
         this.state = state;
         this._cameFrom = _cameFrom;
         this.maxPlayer = maxPlayer;
         this.minPlayer = minPlayer;
-        this.state.playerMove(place, maxPlayer);
+        this.state.playerMove(place, colorMove);
         this.countColors();
     }
 
@@ -114,4 +115,16 @@ public class State {
     public boolean isEnded(){
         return empty == 0;
     }
+
+
+    public void printState() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print("| ");
+                System.out.print(this.state.gameBoard[i][j] + " |");
+            }
+            System.out.println("");
+        }
+    }
+
 }

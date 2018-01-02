@@ -10,10 +10,12 @@ public class Main {
         char [][] gameBoard = new char[5][5];
         ReversiGame game = new ReversiGame(gameBoard);
         game.buildMap(INPUT_FILENAME);
-        Minimax minimax = new Minimax();
-        State end = minimax.search(game.getInitialState('B','W'),3,'B');
+        Minimax minimax = new Minimax('W');
+        State end = minimax.search(game.getInitialState('W','B'),3,'W');
         while (!end.isEnded()){
             end = minimax.search(end,3,end.getMaxPlayer());
+            end.printState();
+            System.out.println("______________________________________");
         }
 
 //        System.out.println(gameBoard.length);
@@ -28,7 +30,10 @@ public class Main {
 //        game.playerMove(new Point(4,4),'B');
 //        System.out.println("______________________________________");
 //        game.printMap();
-        System.out.println(end.getMaxPlayer());
+        if(end.getHeuristics() > Double.NEGATIVE_INFINITY)
+            System.out.println(end.getMaxPlayer());
+        else
+            System.out.println(end.getMinPlayer());
     }
 
 

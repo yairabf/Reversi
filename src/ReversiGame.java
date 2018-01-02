@@ -12,8 +12,8 @@ public class ReversiGame {
 
 
     public ReversiGame(char[][] gameBoard) {
-
-        this.gameBoard = gameBoard;
+        this.gameBoard = new char[gameBoard.length][gameBoard.length];
+        this.copyBoard(gameBoard);
     }
 
     public void buildMap(String path) {
@@ -190,6 +190,13 @@ public class ReversiGame {
     public void paintRight(int count, char color, Point place) {
         for (int i = place.y + 1; i < count; i++) {
             this.gameBoard[place.y][i] = color;
+        }
+    }
+    private void copyBoard(char [][] board){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                this.gameBoard[i][j] = board[i][j];
+            }
         }
     }
 }
