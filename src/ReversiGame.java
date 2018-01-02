@@ -3,19 +3,26 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Class that represent the Reversi game
+ */
 public class ReversiGame {
+    //the board of the game
     public char [][] gameBoard;
 
-    public char[][] getGameBoard() {
-        return gameBoard;
-    }
-
-
+    /**
+     * constructor
+     * @param gameBoard
+     */
     public ReversiGame(char[][] gameBoard) {
         this.gameBoard = new char[gameBoard.length][gameBoard.length];
         this.copyBoard(gameBoard);
     }
 
+    /**
+     * build game board from a file
+     * @param path the path to the input file
+     */
     public void buildMap(String path) {
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
             String currentLine;
@@ -31,20 +38,21 @@ public class ReversiGame {
         }
     }
 
+    /**
+     * getter for the initial state of the game.
+     * @param maxPlayer
+     * @param minPlayer
+     * @return initial state of the game.
+     */
     public State getInitialState(char maxPlayer, char minPlayer){
         return new State(this, maxPlayer, minPlayer);
     }
 
-    public void printMap() {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print("| ");
-                System.out.print(this.gameBoard[i][j] + " |");
-            }
-            System.out.println("");
-        }
-    }
-
+    /**
+     * this function put a unit in the wanted place
+     * @param place the wanted place
+     * @param color the unit color
+     */
     public void playerMove(Point place, char color){
         this.gameBoard[place.y][place.x] = color;
         //paint up
@@ -139,7 +147,13 @@ public class ReversiGame {
 
     }
 
-    public void paintUpRight(int count, char color, Point place) {
+    /**
+     * paint up and right slant
+     * @param count the number of units we paint
+     * @param color
+     * @param place
+     */
+    private void paintUpRight(int count, char color, Point place) {
         int row = place.y - 1, col = place.x + 1;
         for (int j = 0; j < count; j++) {
             this.gameBoard[row][col] = color;
@@ -147,7 +161,7 @@ public class ReversiGame {
         }
     }
 
-    public void paintUpLeft(int count, char color, Point place) {
+    private void paintUpLeft(int count, char color, Point place) {
         int row = place.y - 1, col = place.x - 1;
         for (int j = 0; j < count; j++) {
             this.gameBoard[row][col] = color;
@@ -155,7 +169,7 @@ public class ReversiGame {
         }
     }
 
-    public void paintDownLeft(int count, char color, Point place) {
+    private void paintDownLeft(int count, char color, Point place) {
         int row = place.y + 1, col = place.x - 1;
         for (int j = 0; j < count; j++) {
             this.gameBoard[row][col] = color;
@@ -163,7 +177,7 @@ public class ReversiGame {
         }
     }
 
-    public void paintDownRight(int count, char color, Point place) {
+    private void paintDownRight(int count, char color, Point place) {
         int row = place.y + 1, col = place.x + 1;
         for (int j = 0; j < count; j++) {
             this.gameBoard[row][col] = color;
@@ -171,23 +185,23 @@ public class ReversiGame {
         }
     }
 
-    public void paintDown(int count, char color, Point place) {
+    private void paintDown(int count, char color, Point place) {
         for (int i = place.y + 1; i < count; i++) {
             this.gameBoard[i][place.x] = color;
         }
     }
 
-    public void paintUp(int count, char color, Point place) {
+    private void paintUp(int count, char color, Point place) {
         for (int i = count; i < place.y; i++) {
             this.gameBoard[i][place.x] = color;
         }
     }
-    public void paintLeft(int count, char color, Point place) {
+    private void paintLeft(int count, char color, Point place) {
         for (int i = count; i < place.x; i++) {
             this.gameBoard[place.y][i] = color;
         }
     }
-    public void paintRight(int count, char color, Point place) {
+    private void paintRight(int count, char color, Point place) {
         for (int i = place.y + 1; i < count; i++) {
             this.gameBoard[place.y][i] = color;
         }
@@ -199,4 +213,49 @@ public class ReversiGame {
             }
         }
     }
+
+    /**
+     * the function checks if this is a vail place to place a unit
+     * @param point the location
+     * @return true or false
+     */
+    public boolean isValidPosition(Point point) {
+        int row = point.y;
+        int column = point.x;
+        int size = this.gameBoard.length;
+        if (column < size - 1) {
+            if (this.gameBoard[row][column + 1] != 'E')
+                return true;
+        }
+        if ((column < size - 1) && (row < size - 1)) {
+            if (this.gameBoard[row + 1][column + 1] != 'E')
+                return true;
+        }
+        if (row < size - 1) {
+            if (this.gameBoard[row + 1][column] != 'E')
+                return true;
+        }
+        if ((column > 0) && (row < size - 1)) {
+            if (this.gameBoard[row + 1][column - 1] != 'E')
+                return true;
+        }
+        if (column > 0) {
+            if (this.gameBoard[row][column - 1] != 'E')
+                return true;
+        }
+        if ((column > 0) && (row > 0)) {
+            if (this.gameBoard[row - 1][column - 1] != 'E')
+                return true;
+        }
+        if (row > 0) {
+            if (this.gameBoard[row - 1][column] != 'E')
+                return true;
+        }
+        if ((column < size - 1) && (row > 0)) {
+            if (this.gameBoard[row - 1][column + 1] != 'E')
+                return true;
+        }
+        return false;
+    }
+
 }

@@ -7,24 +7,17 @@ public class State {
 
     //the string that represent the state
     private ReversiGame state;
+    //counters
     private int blackCount , whiteCount, empty;
-    // the father that create this state
-    private State _cameFrom;
+    //the players
+    private char maxPlayer, minPlayer, moveColor;
 
-    public ReversiGame getState() {
-        return state;
-    }
-
-    public char getMaxPlayer() {
-        return maxPlayer;
-    }
-
-    public char getMinPlayer() {
-        return minPlayer;
-    }
-
-    private char maxPlayer, minPlayer;
-
+    /**
+     * constructor
+     * @param state
+     * @param maxPlayer
+     * @param minPlayer
+     */
     public State(ReversiGame state, char maxPlayer, char minPlayer) {
         this.state = state;
         this.maxPlayer = maxPlayer;
@@ -32,28 +25,54 @@ public class State {
         this.countColors();
     }
 
-    public State(ReversiGame state, State _cameFrom, Point place, char maxPlayer, char minPlayer,char colorMove) {
+    public State(ReversiGame state, Point place, char maxPlayer, char minPlayer, char colorMove) {
         this.state = state;
-        this._cameFrom = _cameFrom;
         this.maxPlayer = maxPlayer;
         this.minPlayer = minPlayer;
+        this.moveColor = colorMove;
         this.state.playerMove(place, colorMove);
         this.countColors();
     }
 
-    /*
-     * setter
-     * @param s the father of the state
+    /**
+     * getter
+     * @return the state
      */
-    public void setCameFrom(State s)
-    {
-        this._cameFrom = s;
+    public ReversiGame getState() {
+        return state;
     }
+
+    /**
+     * getter
+     * @return max player
+     */
+    public char getMaxPlayer() {
+        return maxPlayer;
+    }
+
+    /**
+     * getter
+     * @return minPlayer
+     */
+    public char getMinPlayer() {
+        return minPlayer;
+    }
+
+
+    /**
+     * getter
+     * @return color that just played
+     */
+    public char getMoveColor() {
+        return moveColor;
+    }
+
     /**
      * getter
      * @return the heuristics
      */
     public double getHeuristics() {
+        /*if the board is full */
         if(isEnded()){
             if(this.whiteCount > this.blackCount) {
                 if(this.maxPlayer == 'W')
@@ -67,6 +86,7 @@ public class State {
             }
             else return 0;
         }
+        /*counts the number of units of the maxPlayer*/
         else {
             if(this.maxPlayer == 'W'){
                 return (whiteCount - blackCount) + this.countEdges(this.maxPlayer);
@@ -75,6 +95,11 @@ public class State {
         }
     }
 
+    /**
+     * counts the units on the edges
+     * @param color
+     * @return
+     */
     private int countEdges(char color) {
         int count = 0;
         for (int i = 0; i < this.state.gameBoard.length; i++) {
@@ -93,14 +118,8 @@ public class State {
     }
 
     /**
-     * getter
-     * @return cameFrom
+     * counts the units colors
      */
-    public State getCameFrom()
-    {
-        return this._cameFrom;
-    }
-
     private void countColors(){
         for (int i = 0; i < state.gameBoard.length; i++) {
             for (int j = 0; j < state.gameBoard.length; j++) {
@@ -114,17 +133,6 @@ public class State {
     }
     public boolean isEnded(){
         return empty == 0;
-    }
-
-
-    public void printState() {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print("| ");
-                System.out.print(this.state.gameBoard[i][j] + " |");
-            }
-            System.out.println("");
-        }
     }
 
 }
